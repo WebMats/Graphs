@@ -77,17 +77,17 @@ class SocialGraph:
             visited[target] = []
             # do a Breath First Search for nearest path to user from userID
             queue = [[self.users[userID].name]]
-            while len(queue) > 0:
+            found = False
+            while len(queue) > 0 and found == False:
                 path = queue.pop()
                 v = path[-1]
                 if v == target:
+                    found = True
                     visited[target] = path
                 else:
-                    for friend in self.friendships[user]:
-                        print(friend)
-
-
-        # print(userID)
+                    for friend in self.friendships[v]:
+                        if friend not in path:
+                            queue.insert(0, [*path, friend])
         return visited
 
 
