@@ -49,11 +49,9 @@ class SocialGraph:
         for j in range(1, numUsers+1):
             generated_users.append(j)
             self.addUser(j)
-        for k in range(len(generated_users)):
-            index = random.randint(0, len(generated_users) - 1)
-            generated_users[k], generated_users[index] = generated_users[index], generated_users[k]
+        random.shuffle(generated_users)
         for user in generated_users:
-            number_of_friends = random.randint(0, avgFriendships * 2)
+            number_of_friends = random.randint(1, avgFriendships * 2)
             for num in range(number_of_friends):
                 new_friend = generated_users[random.randint(0, len(generated_users) - 1)]
                 while(new_friend == user or new_friend in self.friendships[user]):
@@ -71,11 +69,9 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
-        # iterate over users
         for user in self.users:
             target = self.users[user].name
             visited[target] = []
-            # do a Breath First Search for nearest path to user from userID
             queue = [[self.users[userID].name]]
             found = False
             while len(queue) > 0 and found == False:
@@ -93,8 +89,10 @@ class SocialGraph:
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(10, 2)
+    sg.populateGraph(1000, 5)
+    print('Friendships \n')
     print(sg.friendships)
+    print('getAllSocialPaths \n')
     connections = sg.getAllSocialPaths(1)
     print(connections)
 

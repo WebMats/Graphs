@@ -17,14 +17,15 @@ class Room:
         print(str(self))
     def getExits(self):
         exits = []
+        if self.e_to is not None:
+            exits.append("e")
         if self.n_to is not None:
             exits.append("n")
         if self.s_to is not None:
             exits.append("s")
         if self.w_to is not None:
             exits.append("w")
-        if self.e_to is not None:
-            exits.append("e")
+        exits.reverse()
         return exits
     def getExitsString(self):
         return f"Exits: [{', '.join(self.getExits())}]"
