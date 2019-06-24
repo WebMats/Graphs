@@ -1,4 +1,4 @@
-
+import random
 
 class User:
     def __init__(self, name):
@@ -44,11 +44,21 @@ class SocialGraph:
         self.lastID = 0
         self.users = {}
         self.friendships = {}
+        generated_users = []
         # !!!! IMPLEMENT ME
-
-        # Add users
-
-        # Create friendships
+        for j in range(1, numUsers+1):
+            generated_users.append(j)
+            self.addUser(j)
+        for k in range(len(generated_users)):
+            index = random.randint(0, len(generated_users) - 1)
+            generated_users[k], generated_users[index] = generated_users[index], generated_users[k]
+        for user in generated_users:
+            number_of_friends = random.randint(0, avgFriendships * 2)
+            for num in range(number_of_friends):
+                new_friend = generated_users[random.randint(0, len(generated_users) - 1)]
+                while(new_friend == user or new_friend in self.friendships[user]):
+                    new_friend = generated_users[random.randint(0, len(generated_users) - 1)]
+                self.friendships[user].add(new_friend)
 
     def getAllSocialPaths(self, userID):
         """
@@ -61,6 +71,23 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        # iterate over users
+        for user in self.users:
+            target = self.users[user].name
+            visited[target] = []
+            # do a Breath First Search for nearest path to user from userID
+            queue = [[self.users[userID].name]]
+            found = False
+            while len(queue) > 0 and found == False:
+                path = queue.pop()
+                v = path[-1]
+                if v == target:
+                    found = True
+                    visited[target] = path
+                else:
+                    for friend in self.friendships[v]:
+                        if friend not in path:
+                            queue.insert(0, [*path, friend])
         return visited
 
 
@@ -70,3 +97,5 @@ if __name__ == '__main__':
     print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
     print(connections)
+
+
